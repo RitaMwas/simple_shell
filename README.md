@@ -1,6 +1,4 @@
-<h1 align="center">
-SIMPLE SHELL PROJECT
-</h1>
+#SIMPLE SHELL PROJECT
 ___
 ## Introduction
 This is a group project, and as part of low-level programming foundation and algorithm--Linux and Unix system programming, we are to develop a simple **UNIX** command interpreter (shell).
