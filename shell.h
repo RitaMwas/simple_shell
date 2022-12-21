@@ -9,11 +9,13 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <signal.h>
 
-
+/* Environ global variable */
+extern char **environ;
+/* Function Prototypes */
 int lsh_ctrld(char **args);
 int lsh_cd(char **args);
-extern char **environ;
 int lsh_exit(char **args);
 int _strcmp(char *s1, char *s2);
 size_t _strncmp(char *s1, char *s2, size_t n);
