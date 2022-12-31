@@ -33,12 +33,14 @@ int exec(char **input, char *s, int *i, env_t **head);
 
 /* path_finder.c */
 char **get_env(char *name, char **env);
+char *_getline_command(void);
 char *path_finder(char **s, char **env);
 char *get_env_val(char *name, char **env);
 
 /* tokenize.c */
 int wordcount(char *str, char delim);
 char **_strtok(char *str, char delim);
+char **tokenize(char *lineptr);
 
 /* print_funcs.c  */
 void print_prompt(void);
@@ -56,11 +58,12 @@ void print_error_cd(int *i, char *s, char **argv);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strstr(char *haystack, char *needle);
-int _strncmp(char *s1, char *s2, unsigned int n);
+size_t _strncmp(char *s1, char *s2, unsigned int n);
 char *_strdup(char *str);
 
 /* string_funcs_2.c */
 int _strlen(char *s);
+char _strcat(char *dest, char *src);
 char *_strcpy(char *dest, char *src);
 
 /* helper_funcs.c */
