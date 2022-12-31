@@ -1,50 +1,51 @@
 #include "shell.h"
-
 /**
- * main - The function that starts the shell
- *
- * Return: 1 on success
+ * main - Main arguments functions
+ * @ac: Count of argumnents
+ * @av: Arguments
+ * @env: Environment
+ * Return: _exit = 0.
  */
-
-int main(void)
+int main(int ac, char **av, char **env)
 {
-	int status = 1;
-	char *line;
-	char **args;
-
-	signal(SIGINT, sigint_handler);
-	while (status)
+	int pathValue = 0, status = 0, is_path = 0;
+	char *line = NULL, /**ptr to inpt*/ **commands = NULL; /**tokenized commands*/
+	(void)ac;
+	while (1)/* loop until exit */
 	{
-		status = isatty(STDIN_FILENO);
-		if (status == 1)
-			write(STDOUT_FILENO, "$ ", 2);
-		line = readline();
-		if (!line)
-		{
+		errno = 0;
+		line = _getline_command();/** reads user input*/
+		if (line == NULL && errno == 0)
 			return (0);
-		}
-		if (_strcmp(line, "exit") == 0)
+		if (line)
 		{
-			free(line);
-			return (0);
+			pathValue++;
+			commands = tokenize(line);/** tokenizes or parse user input*/
+			if (!commands)
+				free(line);
+			if (!_strcmp(commands[0], "env"))/**checks if user wrote env"*/
+				_getenv(env);
+			else
+			{
+				is_path = _values_path(&commands[0], env);/** tokenizes PATH*/
+				status = _fork_fun(commands, av, env, line, pathValue, is_path);
+					if (status == 200)
+					{
+						free(line);
+						return (0);
+					}
+				if (is_path == 0)
+					free(commands[0]);
+			}
+			free(commands); /*free up memory*/
 		}
-		if (_strcmp(line, "env") == 0)
+		else
 		{
-			_printenv();
-			free(line);
-			continue;
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);/** Writes to standard output*/
+			exit(status);
 		}
-		args = splitline(line);
-		if (args == NULL)
-		{
-			free(line);
-			free(args);
-			continue;
-		}
-		/* Execute the commands given by user */
-		status = execute(args);
 		free(line);
-		free(args);
 	}
-	return (0);
+	return (status);
 }
