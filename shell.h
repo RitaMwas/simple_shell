@@ -58,7 +58,7 @@ void print_error_cd(int *i, char *s, char **argv);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strstr(char *haystack, char *needle);
-size_t _strncmp(char *s1, char *s2, unsigned int n);
+size_t _strncmp(char *s1, char *s2, size_t n);
 char *_strdup(char *str);
 
 /* string_funcs_2.c */
@@ -100,5 +100,5 @@ int _unsetenv(env_t **head, char **argv);
 int _setenv(env_t **head, char **argv, int args);
 void setenv_handler(char **argv, env_t **head, int *i, char *prog_name);
 void print_error_setenv(int *i, char *s, char **argv);
-
+void _getenv(char **env);
 #endif
