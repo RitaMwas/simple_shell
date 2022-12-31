@@ -77,7 +77,7 @@ long int exit_handler(char **tokens);
 int env_handler(char **av, env_t **head);
 int cd_handler(char **argv, env_t **head);
 void change_pwd(char *path, char **env, env_t **head);
-
+int _fork_fun(char **arg, char **av,char **env, char *lineptr, int np, int c);
 /* convert.c */
 char *convert(int num, int base);
 long int _atoi(char *s);
@@ -87,6 +87,7 @@ env_t *add_node_end(env_t **head, char *str);
 int add_node_at_index(env_t **head, char *str, int index);
 int delete_node_at_index(env_t **head, unsigned int index);
 int find_index_list(env_t *head, char *name);
+int _values_path(char **arg, char **env);
 
 /* list_funcs_2.c */
 size_t list_len(const env_t *h);
