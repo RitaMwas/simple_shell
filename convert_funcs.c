@@ -101,7 +101,7 @@ int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 	{
 		if (execve(arg[0], arg, env) == -1)
 		{
-			printf("Error\n");
+			fprintf(stderr, format, av[0], np, arg[0]);
 
 			if (!c)
 				free(arg[0]);
