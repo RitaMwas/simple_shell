@@ -79,32 +79,12 @@ char *convert(int num, int base)
 	static char buffer[50];
 	char *ptr = NULL;
 
-<<<<<<< HEAD
 	ptr = &buffer[49];
 	*ptr = '\0';
 	do {
 		*--ptr = rep[num % base];
 		num /= base;
 	} while (num != 0);
-=======
-	pid_t child;
-	int status, i = 0;
-	char *format = "%s: %d: %s: not found\n";
-
-	if (arg[0] == NULL)
-		return (1);
-	for (i = 0; i < lsh_num_builtins(); i++)
-	{
-		if (_strcmp(arg[0], builtin_str[i]) == 0)
-			return (builtin_func[i](arg));
-	}
-	child = fork();
-	if (child == 0)
-	{
-		if (execve(arg[0], arg, env) == -1)
-		{
-			fprintf(stderr, format, av[0], np, arg[0]);
->>>>>>> 2e2d0f061097512c9f1382298ad478ea9117e873
 
 	return (ptr);
 }

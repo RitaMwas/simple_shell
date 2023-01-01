@@ -7,13 +7,7 @@
  * Return: new string on success, NULL on failure
  */
 
-<<<<<<< HEAD
 char *_strdup(char *str)
-=======
-
-
-char _strcat(char *dest, char *src)
->>>>>>> 2e2d0f061097512c9f1382298ad478ea9117e873
 {
 	char *dup = NULL;
 	int c, i = 0;
@@ -24,14 +18,7 @@ char _strcat(char *dest, char *src)
 	while (str[i])
 		i++;
 
-<<<<<<< HEAD
 	dup = malloc(sizeof(char) * i + 1);
-=======
-	}
-	dest[i] = '\0';
-return (*dest);
-}
->>>>>>> 2e2d0f061097512c9f1382298ad478ea9117e873
 
 	if (!dup)
 		return (NULL);
