@@ -78,6 +78,7 @@ int env_handler(char **av, env_t **head);
 int cd_handler(char **argv, env_t **head);
 void change_pwd(char *path, char **env, env_t **head);
 int _fork_fun(char **arg, char **av,char **env, char *lineptr, int np, int c);
+
 /* convert.c */
 char *convert(int num, int base);
 long int _atoi(char *s);
@@ -102,4 +103,5 @@ int _setenv(env_t **head, char **argv, int args);
 void setenv_handler(char **argv, env_t **head, int *i, char *prog_name);
 void print_error_setenv(int *i, char *s, char **argv);
 void _getenv(char **env);
+
 #endif
