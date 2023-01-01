@@ -33,12 +33,14 @@ int exec(char **input, char *s, int *i, env_t **head);
 
 /* path_finder.c */
 char **get_env(char *name, char **env);
+char *_getline_command(void);
 char *path_finder(char **s, char **env);
 char *get_env_val(char *name, char **env);
 
 /* tokenize.c */
 int wordcount(char *str, char delim);
 char **_strtok(char *str, char delim);
+char **tokenize(char *lineptr);
 
 /* print_funcs.c  */
 void print_prompt(void);
@@ -56,11 +58,12 @@ void print_error_cd(int *i, char *s, char **argv);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strstr(char *haystack, char *needle);
-int _strncmp(char *s1, char *s2, unsigned int n);
+size_t _strncmp(char *s1, char *s2, size_t n);
 char *_strdup(char *str);
 
 /* string_funcs_2.c */
 int _strlen(char *s);
+char _strcat(char *dest, char *src);
 char *_strcpy(char *dest, char *src);
 
 /* helper_funcs.c */
@@ -74,7 +77,7 @@ long int exit_handler(char **tokens);
 int env_handler(char **av, env_t **head);
 int cd_handler(char **argv, env_t **head);
 void change_pwd(char *path, char **env, env_t **head);
-
+int _fork_fun(char **arg, char **av,char **env, char *lineptr, int np, int c);
 /* convert.c */
 char *convert(int num, int base);
 long int _atoi(char *s);
@@ -84,6 +87,7 @@ env_t *add_node_end(env_t **head, char *str);
 int add_node_at_index(env_t **head, char *str, int index);
 int delete_node_at_index(env_t **head, unsigned int index);
 int find_index_list(env_t *head, char *name);
+int _values_path(char **arg, char **env);
 
 /* list_funcs_2.c */
 size_t list_len(const env_t *h);
@@ -97,5 +101,5 @@ int _unsetenv(env_t **head, char **argv);
 int _setenv(env_t **head, char **argv, int args);
 void setenv_handler(char **argv, env_t **head, int *i, char *prog_name);
 void print_error_setenv(int *i, char *s, char **argv);
-
+void _getenv(char **env);
 #endif
