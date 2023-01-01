@@ -1,75 +1,54 @@
 #include "shell.h"
+
 /**
- * _get_path - get variable PATH.
- * @env: enviromente local
- * Return: value of PATH.
+ * sigint_handler - doesn't exit in case of Ctrl-C
+ * @sig: required for signal function to run properly
+ *
+ * Description: ignore sig, print newline, print the prompt
+ * Call to fflush discards the Ctrl-C
  */
 
-char *_get_path(char **env)
+void sigint_handler(int sig)
 {
-	size_t i = 0, r = 0, count = 5;
-	char *path = NULL;
-
-	for (i = 0; _strncmp(env[i], "PATH=", 5); i++)
-		;
-	if (env[i] == NULL)
-		return (NULL);
-
-	for (count = 5; env[i][r]; r++, count++)
-		;
-	path = malloc(sizeof(char) * (count + 1));
-
-	if (path == NULL)
-		return (NULL);
-
-	for (r = 5, count = 0; env[i][r]; r++, count++)
-		path[count] = env[i][r];
-
-	path[count] = '\0';
-	return (path);
+	(void)sig;
+	_putchar('\n');
+	print_prompt();
+	fflush(stdout);
 }
+
 /**
- * _values_path - Separate the path in new strings.
- * @arg: Command input of user.
- * @env: Enviroment.
- * Return: Pointer to strings.
+ * free_everything - frees arrays of strings
+ * @args: array of strings to free
  */
-int _values_path(char **arg, char **env)
+
+void free_everything(char **args)
 {
-	char *token = NULL, *path_rela = NULL, *path_absol = NULL;
-	size_t value_path, len;
-	struct stat stat_lineptr;
+	int i;
 
-	if (stat(*arg, &stat_lineptr) == 0)
-		return (-1);
-	path_rela = _get_path(env);/** gets the content of "PATH="*/
-	if (!path_rela)
-		return (-1);
-	token = strtok(path_rela, ":"); /**tokenizes the content of "PATH="*/
-	len = _strlen(*arg); /**gets length of arg*/
-	while (token)
-	{
-		value_path = _strlen(token);
-		path_absol = malloc(sizeof(char) * (value_path + len + 2));
-		if (!path_absol)
-		{
-			free(path_rela);
-			return (-1);
-		}
-		path_absol = strcpy(path_absol, token);
-		_strcat(path_absol, "/");
-		_strcat(path_absol, *arg);
+	if (!args)
+		return;
 
-		if (stat(path_absol, &stat_lineptr) == 0)
-		{
-			*arg = path_absol;
-			free(path_rela);
-			return (0);
-		}
-		free(path_absol);
-		token = strtok(NULL, ":");
-	}
-	token = '\0';
-	free(path_rela);
-	return (-1);
+	for (i = 0; args[i]; i++)
+		free(args[i]);
+
+	free(args);
+}
+
+/**
+ * parse_line - handle newline character if found, and parses the input line
+ * @line: line read from stdin
+ * @get: size of line returned from getline
+ *
+ * Return: parsed line
+ */
+
+char **parse_line(char *line, int get)
+{
+	char **input = NULL;
+
+	if (line[get - 1] == '\n')
+		line[get - 1] = '\0';
+	input = _strtok(line, ' ');
+
+	return (input);
 }

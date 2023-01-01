@@ -1,119 +1,90 @@
 #include "shell.h"
-int lsh_cd(char **args);
-int lsh_help(char **args);
-int lsh_exit(char **args);
-int lsh_ctrld(char **args);
-
-/*
- * List of builtin commands, followed by their corresponding functions.
- */
-char *builtin_str[] = {"cd",  "exit", "^D"};
-
-int (*builtin_func[]) (char **) = {&lsh_cd, &lsh_exit, &lsh_ctrld};
 
 /**
- * lsh_num_builtins - size
- * Return: size
+ * _atoi - converts a string to an integer
+ * @s: string to be converted
+ *
+ * Description: if the first character is a '+',
+ * Go to next character
+ * Loop through the string while the flag is 0
+ * If the first character is '-'
+ * Return -1 because we don't want negative values
+ * If the current character is a digit, convert it into a digit
+ * Store it into the integer
+ * If the next character is a letter, breakout of the loop
+ * If the result number is superior to INT_MAX or is negative
+ * Return -1 for error
+ * Else return the number
+ *
+ * Return: the int converted from the string
  */
 
-int lsh_num_builtins(void)
+long int _atoi(char *s)
 {
-	return (sizeof(builtin_str) / sizeof(char *));
-}
+	int i, len, f, digit;
+	long int n;
 
-/*
- * Builtin function implementations.
-*/
+	i = 0;
+	n = 0;
+	len = _strlen(s);
+	f = 0;
+	digit = 0;
 
-/**
- * lsh_cd - builtin to change dirs
- * @args: List of args.  args[0] is "cd".  args[1] is the directory.
- * Return: 1 on success
- */
-int lsh_cd(char **args)
-{
-	if (args[1] == NULL)
+	if (s[i] == '+')
+		i++;
+
+	while (i < len && f == 0)
 	{
-		printf("expected argument to \"cd\"\n");
-	}
-	else
-	{
-		if (chdir(args[1]) != 0)
+		if (s[i] == '-')
+			return (-1);
+
+		if (s[i] >= '0' && s[i] <= '9')
 		{
-			perror("hsh");
+			digit = s[i] - '0';
+			n = n * 10 + digit;
+			f = 1;
+			if (s[i + 1] < '0' || s[i + 1] > '9')
+				break;
+			f = 0;
 		}
+		i++;
 	}
-	return (1);
-}
 
+	if (f == 0)
+		return (0);
 
-/**
- * lsh_exit - builtin to exit the shell
- * @args: List of args.  Not examined.
- * Return: Always returns 0, to terminate execution.
- */
-int lsh_exit(char **args)
-{
-	(void)args;
-	free(args);
-	return (200);
+	if (n > INT_MAX || n < 0)
+		return (-1);
+
+	return (n);
 }
 
 /**
- * lsh_ctrld - builtin to handle "^D" call
- * @args: List of args.  Not examined.
- * Return: Always returns 0, to terminate execution.
- */
-int lsh_ctrld(char **args)
-{
-	(void)args;
-	free(args);
-	return (200);
-}
-
-/**
- *_fork_fun - foo that create a fork.
- *@arg: Command and values path.
- *@av: Has the name of our program.
- *@env: Environment
- *@lineptr: Command line for the user.
- *@np: ID of proces.
- *@c: Checker add new test
- *Return: 0 success
+ * convert - converts number and base into string
+ * @num: input number
+ * @base: input base
+ *
+ * Description: Create a static buffer of 50 chars
+ * And a static string of digits
+ * Go from the end of the buffer and loop until num reaches 0
+ * Current number is the member of rep at index num % base
+ * Divide num by base
+ *
+ * Return: result string
  */
 
-int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
+char *convert(int num, int base)
 {
+	static char *rep = "0123456789";
+	static char buffer[50];
+	char *ptr = NULL;
 
-	pid_t child;
-	int status, i = 0;
-	char *format = "%s: %d: %s: not found\n";
+	ptr = &buffer[49];
+	*ptr = '\0';
+	do {
+		*--ptr = rep[num % base];
+		num /= base;
+	} while (num != 0);
 
-	if (arg[0] == NULL)
-		return (1);
-	for (i = 0; i < lsh_num_builtins(); i++)
-	{
-		if (_strcmp(arg[0], builtin_str[i]) == 0)
-			return (builtin_func[i](arg));
-	}
-	child = fork();
-	if (child == 0)
-	{
-		if (execve(arg[0], arg, env) == -1)
-		{
-			printf("Error\n");
-
-			if (!c)
-				free(arg[0]);
-			free(arg);
-			free(lineptr);
-			exit(errno);
-		}
-	}
-	else
-	{
-		wait(&status);
-		return (status);
-	}
-	return (0);
+	return (ptr);
 }
